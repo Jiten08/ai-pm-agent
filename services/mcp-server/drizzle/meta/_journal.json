@@ -15,6 +15,20 @@
       "when": 1790000873443,
       "tag": "0001_stormy_kang",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790009299504,
+      "tag": "0002_nifty_inhumans",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790010087188,
+      "tag": "0003_burly_fenris",
+      "breakpoints": true
     }
   ]
 }

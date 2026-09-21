@@ -11,6 +11,7 @@ import {
   pgTable,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+import { table } from "node:console";
 
 export const projectSpecStatusEnum = pgEnum("project_spec_status", [
   "DRAFT",
@@ -37,7 +38,11 @@ export const taskPriorityEnum = pgEnum("task_priority", [
   "CRITICAL",
 ]);
 
-// export const testFrameworksEnum = pgEnum("test_framework", ["PYTEST", "JEST", "VITEST"]);
+export const testFrameworksEnum = pgEnum("test_framework", [
+  "PYTEST",
+  "JEST",
+  "VITEST",
+]);
 
 export const testArtifactStatusEnum = pgEnum("test_artifact_status", [
   "GENERATED",
@@ -47,7 +52,9 @@ export const testArtifactStatusEnum = pgEnum("test_artifact_status", [
 ]);
 
 export const teamMembers = pgTable("team_members", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   role: text("role"),
@@ -55,7 +62,9 @@ export const teamMembers = pgTable("team_members", {
 });
 
 export const projectSpecs = pgTable("project_specs", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   title: text("title").notNull(),
   rawIdea: text("raw_idea").notNull(),
   clarifiedScope: jsonb("clarified_scope"),
@@ -67,3 +76,46 @@ export const projectSpecs = pgTable("project_specs", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const tasks = pgTable(
+  "tasks",
+  {
+    id: uuid("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    projectSpecId: text("project_spec_id")
+      .notNull()
+      .references(() => projectSpecs.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    moduleName: text("module_name"),
+    status: taskStatusEnum("status").default("BACKLOG").notNull(),
+    priority: taskPriorityEnum("priority").default("MEDIUM").notNull(),
+    asigneeId: uuid("asignee_id").references(() => teamMembers.id),
+    filePathHint: text("file_path_hint"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("task_project_status_idx").on(table.projectSpecId, table.status),
+  ],
+);
+
+export const testArtifacts = pgTable(
+  "test_aartifacts",
+  {
+    id: uuid("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    taskId: text("task_id")
+      .notNull()
+      .references(() => tasks.id, { onDelete: "cascade" }),
+    framework: testFrameworksEnum("framework").notNull(),
+    sourceFilePath: text("source_file_path").notNull(),
+    generatedCode: text("generated_code").notNull(),
+    status: testArtifactStatusEnum("status").default("GENERATED").notNull(),
+    reviewedById: uuid("reviewed_by_id").references(() => teamMembers.id),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [index("test_artifacts_task_idx").on(table.taskId)],
+);
