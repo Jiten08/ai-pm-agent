@@ -1,0 +1,57 @@
+# ── Environment / secrets ──────────────────────────────────────
+# Never commit real env files — only .env.example per service.
+.env
+.env.local
+.env.*.local
+**/.env
+!.env.example
+!**/.env.example
+
+# ── Node (services/mcp-server, services/web-dashboard) ─────────
+node_modules/
+dist/
+dist-ssr/
+build/
+.vite/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# ── Python (services/agent-engine) ──────────────────────────────
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Drizzle ──────────────────────────────────────────────────────
+# Commit drizzle/migrations/ (including its meta/ snapshots) —
+# drizzle-kit needs migration history to generate correct future
+# diffs. Nothing to ignore here on purpose.
+
+# ── Docker ───────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Test coverage ────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── Editors ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ───────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Logs ─────────────────────────────────────────────────────────
+*.log
+logs/
