@@ -53,3 +53,17 @@ export const teamMembers = pgTable("team_members", {
   role: text("role"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const projectSpecs = pgTable("project_specs", {
+  id: uuid("id").primaryKey(),
+  title: text("title").notNull(),
+  rawIdea: text("raw_idea").notNull(),
+  clarifiedScope: jsonb("clarified_scope"),
+  techStack: jsonb("tech_stack"),
+  hldMermaid: text("hld_mermaid"),
+  hldApprovedAt: timestamp("hld_approved_at"),
+  lldMarkdown: text("lld_markdown"),
+  status: projectSpecStatusEnum("status").default("DRAFT").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
