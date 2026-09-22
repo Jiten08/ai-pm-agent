@@ -1,4 +1,14 @@
-import "dotenv/config";
-import { drizzle } from "drizzle-orm/node-postgres";
+import { McpServer } from "@modelcontextprotocol/server";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp";
+import express from "express";
+import * as z from "zod";
+import cors from "cors";
 
-const db = drizzle(process.env.DATABASE_URL!);
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const server = new McpServer({
+  name: "ai-pm",
+  version: "0.1.0",
+});
