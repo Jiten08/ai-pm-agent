@@ -17,6 +17,12 @@ export const ApproveHldSchema = z.object({
   projectSpecId: z.uuid(),
 });
 
+export const SaveLldSchema = z.object({
+  id: z.string(),
+  lldMarkdown: z.string().min(1),
+  techStack: z.record(z.string(), z.any()).optional(),
+});
+
 export const UpdateLldSchema = z.object({
   projectSpecId: z.uuid(),
   lldMarkdown: z.string(),
