@@ -63,7 +63,7 @@ export function registerProjectSpecTools(server: McpServer) {
       inputSchema: ApproveHldSchema,
     },
 
-    async ({ id }) => {
+    async ({ projectSpecId }) => {
       const [row] = await db
         .update(projectSpecs)
         .set({
@@ -71,7 +71,7 @@ export function registerProjectSpecTools(server: McpServer) {
           hldApprovedAt: new Date(),
           updatedAt: new Date(),
         })
-        .where(eq(projectSpecs.id, id))
+        .where(eq(projectSpecs.id, projectSpecId))
         .returning();
 
       return { content: [{ type: "text", text: JSON.stringify(row) }] };

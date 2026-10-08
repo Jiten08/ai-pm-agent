@@ -9,6 +9,7 @@ export const CreateProjectSpecSchema = z.object({
 });
 
 export const UpdateHldSchema = z.object({
+  id: z.string(),
   projectSpecId: z.uuid(),
   hldMermaid: z.string(),
 });
