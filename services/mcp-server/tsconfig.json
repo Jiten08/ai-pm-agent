@@ -24,8 +24,8 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "target": "ES2022",
-    "module": "Node16",
-    "moduleResolution": "Node16",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "types": ["node"],
     // "outDir": "./build",
     // "rootDir": "./src",
@@ -44,6 +44,7 @@
 
     // Recommended Options
     "strict": true,
+    "resolveJsonModule": true,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
