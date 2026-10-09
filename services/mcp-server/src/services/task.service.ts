@@ -1,18 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/client.js";
 import { tasks } from "../db/schema.js";
-
-type TaskInput = {
-  title: string;
-
-  description: string;
-
-  moduleName?: string;
-
-  priority?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
-
-  filePathHint?: string;
-};
+import type { TaskInput } from "../schemas/tasks.schema.js";
 
 type TaskStatus =
   | "BACKLOG"

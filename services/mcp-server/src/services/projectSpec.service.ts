@@ -19,6 +19,19 @@ export async function updateHld(id: string, hldMermaid: string) {
   return row;
 }
 
+export async function approveHld(id: string) {
+  const [row] = await db
+    .update(projectSpecs)
+    .set({
+      status: "HLD_APPROVED",
+      hldApprovedAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .where(eq(projectSpecs.id, id))
+    .returning();
+  return row;
+}
+
 export async function saveLld(
   id: string,
   lldMarkdown: string,

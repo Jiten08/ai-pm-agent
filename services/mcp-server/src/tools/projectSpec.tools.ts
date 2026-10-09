@@ -2,7 +2,7 @@ import { McpServer } from "@modelcontextprotocol/server";
 import { db } from "../db/client.js";
 import { eq } from "drizzle-orm";
 import { projectSpecs } from "../db/schema.js";
-
+import * as projectSpecService from "../services/projectSpec.service.js";
 import {
   CreateProjectSpecSchema,
   UpdateHldSchema,
@@ -40,15 +40,7 @@ export function registerProjectSpecTools(server: McpServer) {
     },
 
     async ({ id, hldMermaid }) => {
-      const [row] = await db
-        .update(projectSpecs)
-        .set({
-          hldMermaid,
-          status: "AWAITING_HLD_APPROVAL",
-          updatedAt: new Date(),
-        })
-        .where(eq(projectSpecs.id, id))
-        .returning();
+      const row = await projectSpecService.updateHld(id, hldMermaid);
 
       return { content: [{ type: "text", text: JSON.stringify(row) }] };
     },
@@ -63,17 +55,8 @@ export function registerProjectSpecTools(server: McpServer) {
       inputSchema: ApproveHldSchema,
     },
 
-    async ({ projectSpecId }) => {
-      const [row] = await db
-        .update(projectSpecs)
-        .set({
-          status: "HLD_APPROVED",
-          hldApprovedAt: new Date(),
-          updatedAt: new Date(),
-        })
-        .where(eq(projectSpecs.id, projectSpecId))
-        .returning();
-
+    async ({ id }) => {
+      const row = await projectSpecService.approveHld(id);
       return { content: [{ type: "text", text: JSON.stringify(row) }] };
     },
   );
@@ -89,17 +72,7 @@ export function registerProjectSpecTools(server: McpServer) {
     },
 
     async ({ id, lldMarkdown, techStack }) => {
-      const [row] = await db
-        .update(projectSpecs)
-        .set({
-          lldMarkdown,
-          techStack,
-          status: "LLD_GENERATED",
-          updatedAt: new Date(),
-        })
-        .where(eq(projectSpecs.id, id))
-        .returning();
-
+      const row = await projectSpecService.saveLld(id, lldMarkdown, techStack);
       return { content: [{ type: "text", text: JSON.stringify(row) }] };
     },
   );

@@ -9,6 +9,8 @@ export const TaskInputSchema = z.object({
   filePathHint: z.string().optional(),
 });
 
+export type TaskInput = z.infer<typeof TaskInputSchema>;
+
 export const BatchCreateTasksSchema = z.object({
   projectSpecId: z.string(),
   tasks: z.array(TaskInputSchema).min(1),
