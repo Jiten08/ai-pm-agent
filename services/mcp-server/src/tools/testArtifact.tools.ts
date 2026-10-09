@@ -1,11 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/server";
-import { eq } from "drizzle-orm";
-import { db } from "../db/client.js";
-import { taskPriorityEnum, testArtifacts } from "../db/schema.js";
-import {
-  CreateTestArtifactSchema,
-  ReviewTestArtifactSchema,
-} from "../schemas/testArtifact.schema.js";
+import { CreateTestArtifactSchema } from "../schemas/testArtifact.schema.js";
+import * as testArtifactService from "../services/testArtifacts.service.js";
 
 export function registerTestArtifactTools(server: McpServer) {
   server.registerTool(
@@ -17,31 +12,12 @@ export function registerTestArtifactTools(server: McpServer) {
     },
 
     async ({ taskId, framework, sourceFilePath, generatedCode }) => {
-      const [row] = await db
-        .insert(testArtifacts)
-        .values({ taskId, framework, sourceFilePath, generatedCode })
-        .returning();
-
-      return { content: [{ type: "text", text: JSON.stringify(row) }] };
-    },
-  );
-
-  server.registerTool(
-    "testArtifacts.review",
-
-    {
-      title: "Review Test Artifact",
-      description: "Record a team member's review verdict on a generated test",
-      inputSchema: ReviewTestArtifactSchema,
-    },
-
-    async ({ id, reviewedById, status }) => {
-      const [row] = await db
-        .update(testArtifacts)
-        .set({ reviewedById, status })
-        .where(eq(testArtifacts.id, id))
-        .returning();
-
+      const row = await testArtifactService.createTestArtifact({
+        taskId,
+        framework,
+        sourceFilePath,
+        generatedCode,
+      });
       return { content: [{ type: "text", text: JSON.stringify(row) }] };
     },
   );
