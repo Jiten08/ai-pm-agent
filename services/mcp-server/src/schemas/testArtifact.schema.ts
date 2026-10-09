@@ -1,19 +1,19 @@
 import { z } from "zod";
+import { TestFrameworkZ, TestArtifactStatusZ } from "./enums.schema.js";
 
 export const CreateTestArtifactSchema = z.object({
   taskId: z.string(),
-
-  framework: z.enum(["PYTEST", "JEST", "VITEST"]),
-
+  framework: TestFrameworkZ,
   sourceFilePath: z.string(),
-
   generatedCode: z.string().min(1),
 });
 
 export const ReviewTestArtifactSchema = z.object({
   id: z.string(),
-
   reviewedById: z.string(),
+  status: TestArtifactStatusZ,
+});
 
-  status: z.enum(["GENERATED", "REVIEWED", "PASSED", "FAILED"]),
+export const ListTestArtifactsQuerySchema = z.object({
+  taskId: z.string(),
 });

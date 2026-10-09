@@ -1,30 +1,29 @@
 import { z } from "zod";
 import { TaskPriorityZ, TaskStatusZ } from "./enums.schema.js";
 
-export const TaskItemSchema = z.object({
+export const TaskInputSchema = z.object({
   title: z.string().min(3),
   description: z.string(),
-  module: z.string().optional(),
+  moduleName: z.string().optional(),
   priority: TaskPriorityZ.default("MEDIUM"),
   filePathHint: z.string().optional(),
 });
 
 export const BatchCreateTasksSchema = z.object({
-  projectSpecId: z.uuid(),
-  tasks: z.array(TaskItemSchema),
+  projectSpecId: z.string(),
+  tasks: z.array(TaskInputSchema).min(1),
 });
 
 export const ClaimTaskSchema = z.object({
-  taskId: z.uuid(),
-  teamMemberId: z.uuid(),
+  taskId: z.string(),
+  teamMemberId: z.string(),
 });
 
 export const UpdateTaskStatusSchema = z.object({
-  taskId: z.uuid(),
+  taskId: z.string(),
   status: TaskStatusZ,
 });
 
 export const ListTasksSchema = z.object({
-  projectSpecId: z.uuid(),
-  status: TaskStatusZ.optional(),
+  projectSpecId: z.string(),
 });
