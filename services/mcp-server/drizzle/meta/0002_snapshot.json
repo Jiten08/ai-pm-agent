@@ -99,7 +99,7 @@
         },
         "project_spec_id": {
           "name": "project_spec_id",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },

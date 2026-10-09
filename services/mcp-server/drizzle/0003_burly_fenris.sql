@@ -1,7 +1,7 @@
 CREATE TYPE "public"."test_framework" AS ENUM('PYTEST', 'JEST', 'VITEST');--> statement-breakpoint
 CREATE TABLE "test_aartifacts" (
 	"id" uuid PRIMARY KEY NOT NULL,
-	"task_id" text NOT NULL,
+	"task_id" uuid NOT NULL,
 	"framework" "test_framework" NOT NULL,
 	"source_file_path" text NOT NULL,
 	"generated_code" text NOT NULL,

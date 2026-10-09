@@ -8,9 +8,7 @@ import {
   pgTable,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { createId } from "@paralleldrive/cuid2";
-import { create } from "node:domain";
-// import { table } from "node:console";
+import { randomUUID } from "node:crypto";
 
 export const projectSpecStatusEnum = pgEnum("project_spec_status", [
   "DRAFT",
@@ -53,7 +51,7 @@ export const testArtifactStatusEnum = pgEnum("test_artifact_status", [
 export const teamMembers = pgTable("team_members", {
   id: uuid("id")
     .primaryKey()
-    .$defaultFn(() => createId()),
+    .$defaultFn(() => randomUUID()),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   role: text("role"),
@@ -63,7 +61,7 @@ export const teamMembers = pgTable("team_members", {
 export const projectSpecs = pgTable("project_specs", {
   id: uuid("id")
     .primaryKey()
-    .$defaultFn(() => createId()),
+    .$defaultFn(() => randomUUID()),
   title: text("title").notNull(),
   rawIdea: text("raw_idea").notNull(),
   clarifiedScope: jsonb("clarified_scope"),
@@ -81,8 +79,8 @@ export const tasks = pgTable(
   {
     id: uuid("id")
       .primaryKey()
-      .$defaultFn(() => createId()),
-    projectSpecId: text("project_spec_id")
+      .$defaultFn(() => randomUUID()),
+    projectSpecId: uuid("project_spec_id")
       .notNull()
       .references(() => projectSpecs.id, { onDelete: "cascade" }),
     title: text("title").notNull(),
@@ -105,8 +103,8 @@ export const testArtifacts = pgTable(
   {
     id: uuid("id")
       .primaryKey()
-      .$defaultFn(() => createId()),
-    taskId: text("task_id")
+      .$defaultFn(() => randomUUID()),
+    taskId: uuid("task_id")
       .notNull()
       .references(() => tasks.id, { onDelete: "cascade" }),
     framework: testFrameworksEnum("framework").notNull(),
