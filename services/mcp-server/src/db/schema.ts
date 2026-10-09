@@ -1,7 +1,4 @@
 import {
-  PgTable,
-  integer,
-  varchar,
   uuid,
   pgEnum,
   index,
@@ -11,7 +8,9 @@ import {
   pgTable,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { table } from "node:console";
+import { createId } from "@paralleldrive/cuid2";
+import { create } from "node:domain";
+// import { table } from "node:console";
 
 export const projectSpecStatusEnum = pgEnum("project_spec_status", [
   "DRAFT",
@@ -54,7 +53,7 @@ export const testArtifactStatusEnum = pgEnum("test_artifact_status", [
 export const teamMembers = pgTable("team_members", {
   id: uuid("id")
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+    .$defaultFn(() => createId()),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   role: text("role"),
@@ -64,7 +63,7 @@ export const teamMembers = pgTable("team_members", {
 export const projectSpecs = pgTable("project_specs", {
   id: uuid("id")
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+    .$defaultFn(() => createId()),
   title: text("title").notNull(),
   rawIdea: text("raw_idea").notNull(),
   clarifiedScope: jsonb("clarified_scope"),
@@ -82,7 +81,7 @@ export const tasks = pgTable(
   {
     id: uuid("id")
       .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
+      .$defaultFn(() => createId()),
     projectSpecId: text("project_spec_id")
       .notNull()
       .references(() => projectSpecs.id, { onDelete: "cascade" }),
@@ -106,7 +105,7 @@ export const testArtifacts = pgTable(
   {
     id: uuid("id")
       .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
+      .$defaultFn(() => createId()),
     taskId: text("task_id")
       .notNull()
       .references(() => tasks.id, { onDelete: "cascade" }),
@@ -119,3 +118,27 @@ export const testArtifacts = pgTable(
   },
   (table) => [index("test_artifacts_task_idx").on(table.taskId)],
 );
+
+export const projectSpecRelations = relations(projectSpecs, ({ many }) => ({
+  tasks: many(tasks),
+}));
+
+export const tasksRelations = relations(tasks, ({ one, many }) => ({
+  projectSpec: one(projectSpecs, {
+    fields: [tasks.projectSpecId],
+    references: [projectSpecs.id],
+  }),
+  assignee: one(teamMembers, {
+    fields: [tasks.asigneeId],
+    references: [teamMembers.id],
+  }),
+  testArtifacts: many(testArtifacts),
+}));
+
+export const testArtifactsRelations = relations(testArtifacts, ({ one }) => ({
+  task: one(tasks, { fields: [testArtifacts.taskId], references: [tasks.id] }),
+  reviewedBy: one(teamMembers, {
+    fields: [testArtifacts.reviewedById],
+    references: [teamMembers.id],
+  }),
+}));
