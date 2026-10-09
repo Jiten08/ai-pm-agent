@@ -7,11 +7,11 @@ export const projectSpecRoutes = Router();
 
 projectSpecRoutes.get("/project-specs", async (_req, res) => {
   const rows = await projectSpecService.listProjectSpecs();
-  new ApiResponse(200, rows, "Fetched project specs successfully.");
+  return res.status(200).json(new ApiResponse(200, rows));
 });
 
 projectSpecRoutes.get("/project-specs/:id", async (req, res) => {
   const row = await projectSpecService.getProjectSpec(req.params.id);
   if (!row) throw new ApiError(404, "Not found");
-  new ApiResponse(200, row, "Data fetched successfully.");
+  return res.status(200).json(new ApiResponse(200, row));
 });
