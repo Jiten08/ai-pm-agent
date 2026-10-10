@@ -28,7 +28,10 @@ taskRoutes.patch(
   validateBody(ClaimBodySchema),
   async (req, res) => {
     const { teamMemberId } = req.body as z.infer<typeof ClaimBodySchema>;
-    const row = await taskService.claimTask(req.params.id, teamMemberId);
+    const row = await taskService.claimTask(
+      req.params.id as string,
+      teamMemberId,
+    );
     if (!row) {
       throw new ApiError(404, "not found");
     }
@@ -44,7 +47,10 @@ taskRoutes.patch(
   validateBody(UpdateStatusBodySchema),
   async (req, res) => {
     const { status } = req.body as z.infer<typeof UpdateStatusBodySchema>;
-    const row = await taskService.updateTaskStatus(req.params.id, status);
+    const row = await taskService.updateTaskStatus(
+      req.params.id as string,
+      status,
+    );
     if (!row) {
       throw new ApiError(404, "not found");
     }
