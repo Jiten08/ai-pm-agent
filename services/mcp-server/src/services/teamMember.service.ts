@@ -5,4 +5,11 @@ export async function listTeamMembers() {
   return db.select().from(teamMembers);
 }
 
-// read-only for data that is directly seeded in database, tool/route to create a team member will be added soon
+export async function createTeamMember(input: {
+  name: string;
+  email: string;
+  role?: string;
+}) {
+  const [row] = await db.insert(teamMembers).values(input).returning();
+  return row;
+}
