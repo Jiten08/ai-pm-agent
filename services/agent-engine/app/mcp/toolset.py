@@ -3,7 +3,7 @@ from google.adk.tools.mcp_tool import McpToolset
 from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPConnectionParams
 
 
-def build_mcp_server(tool_filter: list[str] | None = None) -> McpToolset: 
+def build_mcp_toolset(tool_filter: list[str] | None = None) -> McpToolset: 
   """ A fresh McpToolset per agent - Every agent in the hierarchy gets its own instance with a tool_filter
   instead of sharing one across the process."""
 
