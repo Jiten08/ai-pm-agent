@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/server";
-import { BatchCreateTasksSchema } from "../schemas/tasks.schema.js";
+import { BatchCreateTasksSchema } from "@ai-pm-qa/db";
 import * as taskService from "../services/task.service.js";
 
 export function registerTaskTools(server: McpServer) {

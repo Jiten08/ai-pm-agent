@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/server";
-import { CreateTestArtifactSchema } from "../schemas/testArtifact.schema.js";
+import { CreateTestArtifactSchema } from "@ai-pm-qa/db";
 import * as testArtifactService from "../services/testArtifacts.service.js";
 
 export function registerTestArtifactTools(server: McpServer) {
