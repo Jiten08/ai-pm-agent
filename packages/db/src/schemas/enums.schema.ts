@@ -28,3 +28,9 @@ export const TestArtifactStatusZ = z.enum([
   "PASSED",
   "FAILED",
 ]);
+
+export type ProjectSpecStatus = z.infer<typeof ProjectSpecStatusZ>;
+export type TaskStatus = z.infer<typeof TaskStatusZ>;
+export type TaskPriority = z.infer<typeof TaskPriorityZ>;
+export type TestFramework = z.infer<typeof TestFrameworkZ>;
+export type TestArtifactStatus = z.infer<typeof TestArtifactStatusZ>;
