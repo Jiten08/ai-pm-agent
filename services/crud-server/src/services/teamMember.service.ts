@@ -8,6 +8,7 @@ export async function listTeamMembers() {
   return db.select().from(teamMembers);
 }
 
+// The route controller will handle the unique constraint
 export async function ceateTeamMember(input: NewTeamMember) {
   const [row] = await db.insert(teamMembers).values(input).returning();
 
