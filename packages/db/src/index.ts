@@ -10,4 +10,4 @@ export * from "./schemas/enums.schema.js";
 export { createDb, type Db } from "./client.js";
 
 export { eq, and, desc, inArray, sql } from "drizzle-orm";
-export { z, type ZodSchema } from "zod";
+export { z, type ZodType } from "zod";
