@@ -1,14 +1,13 @@
 import { McpServer } from "@modelcontextprotocol/server";
-import { db } from "../db/client.js";
-import { eq } from "drizzle-orm";
-import { projectSpecs } from "../db/schema.js";
+import { db } from "../db.js";
 import * as projectSpecService from "../services/projectSpec.service.js";
 import {
+  projectSpecs,
   CreateProjectSpecSchema,
   UpdateHldSchema,
   ApproveHldSchema,
   SaveLldSchema,
-} from "../schemas/project.schema.js";
+} from "@ai-pm-qa/db";
 
 export function registerProjectSpecTools(server: McpServer) {
   server.registerTool(

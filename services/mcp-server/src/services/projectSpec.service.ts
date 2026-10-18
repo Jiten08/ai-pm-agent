@@ -1,6 +1,5 @@
-import { eq, desc } from "drizzle-orm";
-import { db } from "../db/client.js";
-import { projectSpecs } from "../db/schema.js";
+import { eq, projectSpecs } from "@ai-pm-qa/db";
+import { db } from "../db.js";
 
 export async function createProjectSpec(title: string, rawIdea: string) {
   const [row] = await db
@@ -48,18 +47,4 @@ export async function saveLld(
     .where(eq(projectSpecs.id, id))
     .returning();
   return row;
-}
-
-// REST-only reads
-
-export async function getProjectSpec(id: string) {
-  const [row] = await db
-    .select()
-    .from(projectSpecs)
-    .where(eq(projectSpecs.id, id));
-  return row;
-}
-
-export async function listProjectSpecs() {
-  return db.select().from(projectSpecs).orderBy(desc(projectSpecs.createdAt));
 }

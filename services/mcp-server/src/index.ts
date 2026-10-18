@@ -1,15 +1,10 @@
 import "dotenv/config";
 import express from "express";
-import cors from "cors";
 import { McpServer } from "@modelcontextprotocol/server";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp";
 import { registerProjectSpecTools } from "./tools/projectSpec.tools.js";
 import { registerTaskTools } from "./tools/task.tools.js";
 import { registerTestArtifactTools } from "./tools/testArtifact.tools.js";
-import { projectSpecRoutes } from "./routes/projectSpec.routes.js";
-import { teamMemberRoutes } from "./routes/teamMember.routes.js";
-import { taskRoutes } from "./routes/task.routes.js";
-import { testArtifactRoutes } from "./routes/testArtifact.routes.js";
 
 function buildServer(): McpServer {
   const server = new McpServer({ name: "ai-pm-mcp", version: "0.2.0" });
@@ -22,31 +17,26 @@ function buildServer(): McpServer {
 }
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
 app.all("/mcp", async (req, res) => {
-  const server = buildServer();
-  const transport = new StreamableHTTPServerTransport({
-    enableJsonResponse: true,
-  });
+  const server = buildServer(); // created a new server for every request
+  try {
+    const transport = new StreamableHTTPServerTransport({
+      enableJsonResponse: true,
+    });
 
-  res.on("close", () => {
-    transport.close();
-    server.close();
-  });
+    res.on("close", () => {
+      transport.close();
+      server.close();
+    });
 
-  await server.connect(transport);
-  await transport.handleRequest(req, res, req.body);
+    await server.connect(transport);
+    await transport.handleRequest(req, res, req.body);
+  } catch (error) {
+    console.error("Error handling MCP requestL ", error);
+  }
 });
-
-app.use(
-  "/api",
-  projectSpecRoutes,
-  taskRoutes,
-  testArtifactRoutes,
-  teamMemberRoutes,
-);
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });

@@ -8,8 +8,8 @@
 !**/.env.example
 
 # ── Node (services/mcp-server, services/web-dashboard) ─────────
-node_modules/
-dist/
+**/node_modules/
+**/dist/
 dist-ssr/
 build/
 .vite/
