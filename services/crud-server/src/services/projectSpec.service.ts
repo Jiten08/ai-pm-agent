@@ -5,7 +5,7 @@ export async function listProjectSpecs() {
   return db.select().from(projectSpecs).orderBy(desc(projectSpecs.createdAt));
 }
 
-export async function getProjectSPec(id: string) {
+export async function getProjectSpec(id: string) {
   const [row] = await db
     .select()
     .from(projectSpecs)
