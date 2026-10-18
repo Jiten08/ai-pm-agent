@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
-import { z, type ZodType } from "@ai-pm-qa/db";
+import { z } from "@ai-pm-qa/db";
 
-export function validateBody(schema: ZodType): RequestHandler {
+export function validateBody(schema: z.ZodType): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
     if (!result.success) {
@@ -13,7 +13,7 @@ export function validateBody(schema: ZodType): RequestHandler {
   };
 }
 
-export function validateQuery(schema: ZodType): RequestHandler {
+export function validateQuery(schema: z.ZodType): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.query);
     if (!result.success) {
