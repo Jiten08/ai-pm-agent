@@ -32,7 +32,7 @@ teamMemberRoutes.post(
           .json({ error: "a team member with that email already exists" });
         return;
       }
-      throw err;
+      throw err; // For errors other than uniqueViolation
     }
   },
 );
