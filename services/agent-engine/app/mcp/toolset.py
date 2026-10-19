@@ -10,7 +10,7 @@ def build_mcp_toolset(tool_filter: list[str] | None = None) -> McpToolset:
   return McpToolset(
     connection_params=StreamableHTTPConnectionParams(
       url=MCP_SERVER_URL,
-      timeout=10,
+      timeout=10, #seconds to connect 
       sse_read_timeout=300,
     ),
     tool_filter=tool_filter, 
